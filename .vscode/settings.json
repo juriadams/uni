@@ -1,0 +1,12 @@
+{
+    "deepscan.enable": true,
+    "files.associations": {
+        "*.env.development": "env",
+        "*.env.production": "env",
+        "*.env.local": "env",
+        "simple.h": "c",
+        "advanced.h": "c",
+        "stdio.h": "c",
+        "__locale": "c"
+    }
+}

@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "lib/commands.h"
 #include "garage.c"
 
 void start(void);
 
 void construct(void)
 {
-    printf("=== create a new car\n");
-
     // Body props
     char make[20];
     int topSpeed;
@@ -22,7 +21,7 @@ void construct(void)
     int cylinders;
     int displacement;
 
-    printf("\nMake: ");
+    printf("Make: ");
     scanf("%s", *&make); // `
     printf("Top Speed: ");
     scanf("%d", &topSpeed);
@@ -31,7 +30,7 @@ void construct(void)
     printf("ABS (1 for \"yes\", 0 for \"no\"): ");
     scanf("%d", &hasAbs);
 
-    printf("Options (max. 10):");
+    printf("Options (max. 10):\n");
 
     for (int i = 0; i < 10; i++)
     {
@@ -66,41 +65,52 @@ void construct(void)
     car.doors = doors;
     car.hasAbs = hasAbs == 1 ? TRUE : FALSE;
 
-    char *aids[10] = {};
-    car.options = aids;
     for (int i = 0; i < sizeof(options); i++)
     {
-        // Not executing for whatever fucking reason
-        strcpy(car.options[i], options[i]);
+        // ⚠️ Breaking: `SIGSEGV (Address boundary error)`
+        // strcpy(car.options[i], options[i]);
     }
 
     car.engine = engine;
 
     addToGarage(car);
+
+    printf("\nCar was added to the Garage!\n");
 }
 
 void removeCarFromParkinglot(void)
 {
-    // printf("Input the index of the Car you want to remove\n");
-    // int index;
-    // scanf("%d", &index);
-    // removeFromGarage(parkinglot[index]);
+    printf("\nWhat Car would you like to remove from the Garage?\n");
+    int index;
+    scanf("%d", &index);
+    printf("\n");
+
+    removeFromGarage(garage[index]);
 }
 
-void estimateCarValue(void){
-    // printf("Input the index of the Car you want the Value from\n");
-    // int index;
-    // scanf("%d", &index);
-    // printf("%d", calcValue(parkinglot[index]));
+void estimateCarValue(void)
+{
+    printf("\nWhat Car would you like to calculate the value of?\n");
+
+    int input;
+    printf("\n~ ");
+    scanf("%d", &input);
+    printf("\n");
+
+    printf("\nThe Car in spot %d goes for %d\n", input, calcValue(garage[input]));
 };
 
 void printCarInformation(void)
 {
-    // printf("Input the index of the Car you want the Information from\n");
-    // int index;
-    // scanf("%d", &index);
-    // printCar(parkinglot[index]);
-}
+    printf("\nWhat Car would you like to get the details for?\n");
+
+    int input;
+    printf("\n~ ");
+    scanf("%d", &input);
+    printf("\n");
+
+    printCar(garage[input]);
+};
 
 void printAllCars(void)
 {
@@ -110,47 +120,48 @@ void printAllCars(void)
 
 void start(void)
 {
-    printf("=== manual\n");
-    printf("%d to add a new car to the garage\n", 1);
-    printf("%d to remove a car from the garage\n", 2);
-    printf("%d to calculate the value of a car\n", 3);
-    printf("%d to show the details of a car\n", 4);
-    printf("%d to show the details of all cars\n", 5);
-    printf("%d to exit the program\n", 6);
+    printf("\nUsage:\n");
+    printf("    %-15s   Add a new Car to the Garage\n", CLI_PROMPT_NEW);
+    printf("    %-15s   Remove a Car from the Garage\n", CLI_PROMPT_REMOVE);
+    printf("    %-15s   Calculate the value of a Car\n", CLI_PROMPT_CALC);
+    printf("    %-15s   Show details of a Car\n", CLI_PROMPT_PRINT);
+    printf("    %-15s   Show details of all Cars\n", CLI_PROMPT_PRINT_ALL);
+    printf("    %-15s   Exit the program\n", CLI_PROMPT_EXIT);
 
-    int input = -1;
-    scanf("%d", &input);
+    char input[100];
+    printf("\n~ ");
+    fgets(input, 100, stdin);
+    printf("\n");
 
-    switch (input)
+    if ((strlen(input) > 0) && (input[strlen(input) - 1] == '\n'))
+        input[strlen(input) - 1] = '\0';
+
+    if (strcmp(input, CLI_PROMPT_NEW) == 0)
     {
-    case 1:
         construct();
-        start();
-        break;
-
-    case 2:
-        removeCarFromParkinglot();
-        start();
-        break;
-
-    case 3:
-        estimateCarValue();
-        start();
-        break;
-
-    case 4:
-        printCarInformation();
-        start();
-        break;
-
-    case 5:
-        printAllCars();
-        start();
-
-    case 6:
-        exit(0);
-        break;
     }
+    else if (strcmp(input, CLI_PROMPT_REMOVE) == 0)
+    {
+        removeCarFromParkinglot();
+    }
+    else if (strcmp(input, CLI_PROMPT_CALC) == 0)
+    {
+        estimateCarValue();
+    }
+    else if (strcmp(input, CLI_PROMPT_PRINT) == 0)
+    {
+        printCarInformation();
+    }
+    else if (strcmp(input, CLI_PROMPT_PRINT_ALL) == 0)
+    {
+        printAllCars();
+    }
+    else if (strcmp(input, CLI_PROMPT_EXIT) == 0)
+    {
+        exit(0);
+    }
+
+    start();
 }
 
 int main()

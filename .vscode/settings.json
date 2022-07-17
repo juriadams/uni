@@ -26,6 +26,9 @@
         "unordered_map": "c",
         "vector": "c",
         "__functional_03": "c",
-        "__functional_base": "c"
+        "__functional_base": "c",
+        "stdlib.h": "c",
+        "commands.h": "c",
+        "typeinfo": "c"
     }
 }

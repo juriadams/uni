@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf out/
 mkdir out out/i out/ii
 
 echo "building..."

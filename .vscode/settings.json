@@ -7,6 +7,25 @@
         "simple.h": "c",
         "advanced.h": "c",
         "stdio.h": "c",
-        "__locale": "c"
+        "__locale": "c",
+        "chrono": "c",
+        "cmath": "c",
+        "complex": "c",
+        "cstdlib": "c",
+        "string.h": "c",
+        "__hash_table": "c",
+        "__split_buffer": "c",
+        "array": "c",
+        "memory_resource": "c",
+        "functional": "c",
+        "locale": "c",
+        "memory": "c",
+        "optional": "c",
+        "string_view": "c",
+        "tuple": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "__functional_03": "c",
+        "__functional_base": "c"
     }
 }

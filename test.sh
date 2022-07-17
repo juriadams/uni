@@ -1,5 +1,7 @@
 #!/bin/bash
 
-echo "running test suite..."
+echo "running tests..."
 
-gcc -fdiagnostics-color=always -g src/test/test.c -o out/test && ./out/test
+gcc -fdiagnostics-color=always -g src/i/test/test.c -o out/i/test && ./out/i/test
+
+echo "tests done"

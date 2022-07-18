@@ -29,6 +29,8 @@
         "__functional_base": "c",
         "stdlib.h": "c",
         "commands.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "__string": "c",
+        "string": "c"
     }
 }

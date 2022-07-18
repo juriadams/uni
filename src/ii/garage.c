@@ -5,8 +5,26 @@
 
 Car garage[20];
 
+int exists(Car car)
+{
+    if (!car.engine.hp)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
 int calcValue(Car car)
 {
+    if (exists(car) == 0)
+    {
+        printf("This car does not exist.\n");
+        return 0;
+    }
+
     int value = 0;
 
     if (car.hasAbs == 1)
@@ -34,44 +52,59 @@ int calcValue(Car car)
 
 void printCar(Car car)
 {
-    printf("%-15s %s\n", "Make", car.make);
-    printf("%-15s %d\n", "Top Speed", car.topSpeed);
-    printf("%-15s %d\n", "Doors", car.doors);
-    printf("%-15s %s\n", "Has ABS", car.hasAbs == 1 ? "Yes" : "No");
+    if (exists(car) == 0)
+    {
+        printf("This car does not exist.\n");
+        return;
+    }
+
+    printf("%-17s %s\n", "Make", car.make);
+    printf("%-17s %d\n", "Top Speed", car.topSpeed);
+    printf("%-17s %d\n", "Doors", car.doors);
+    printf("%-17s %s\n", "Has ABS", car.hasAbs == 1 ? "Yes" : "No");
     printf("Options\n");
     for (int i = 0; i < sizeof(car.options) / sizeof(car.options[0]); i++)
     {
-        printf("    %-11d %s\n", i + 1, car.options[i]);
+        if (strlen(car.options[i]) > 0)
+            printf("    %-13d %s\n", i + 1, car.options[i]);
     }
     printf("Engine\n");
-    printf("    %-11s %d\n", "Horse Power", car.engine.hp);
-    printf("    %-11s %d\n", "Cylinders", car.engine.cylinders);
-    printf("    %-11s %d\n", "Displacement", car.engine.displacement);
+    printf("    %-13s %d\n", "Horse Power", car.engine.hp);
+    printf("    %-13s %d\n", "Cylinders", car.engine.cylinders);
+    printf("    %-13s %d\n", "Displacement", car.engine.displacement);
 }
 
 void addToGarage(Car car)
 {
-    garage[0] = car;
-
+    int free = -1;
     for (int i = 0; i < 20; i++)
     {
-        if (garage[i].engine.hp == 0)
-        {
-            garage[i] = car;
-        }
+        if (exists(garage[i]) == 0)
+            free = i;
         break;
+    }
+
+    printf("\nFREE: %d\n", free);
+
+    if (free == -1)
+    {
+        printf("The Garage seems to be full.\n");
+    }
+    else
+    {
+        garage[free] = car;
     }
 }
 
 void removeFromGarage(Car car)
 {
-    for (int i = 0; i < (sizeof(garage) / sizeof(garage[0])); i++)
+    for (int i = 0; i < 20; i++)
     {
-        if (garage[i].make == car.make)
+        if (strcmp(garage[i].make, car.make) == 0)
         {
             for (int j = i; j < 20 - 1; j++)
             {
-                garage[j] = garage[j + 1];
+                garage[j] = garage[j - 1];
             }
         }
         break;
@@ -80,13 +113,14 @@ void removeFromGarage(Car car)
 
 void printGarage(void)
 {
+    if (exists(garage[0]) == FALSE)
+    {
+        printf("The Garage seems to be empty.\n");
+        return;
+    }
+
     for (int i = 0; i < 20; i++)
     {
-        if (garage[0].engine.hp == 0)
-        {
-            printf("The Garage seems to be empty.\n");
-            return;
-        }
 
         if (garage[i].engine.hp != 0)
         {

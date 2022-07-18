@@ -67,7 +67,7 @@ void construct(void)
 
     for (int i = 0; i < sizeof(options); i++)
     {
-        // ⚠️ Breaking: `SIGSEGV (Address boundary error)`
+        // ⚠️ Breaking: `SIGSEGV (Address boundary error)`, memalloc?
         // strcpy(car.options[i], options[i]);
     }
 
@@ -76,16 +76,22 @@ void construct(void)
     addToGarage(car);
 
     printf("\nCar was added to the Garage!\n");
+    printf("\nEnter the following command to view all cars:\n\n    ~ print garage");
 }
 
 void removeCarFromParkinglot(void)
 {
     printf("\nWhat Car would you like to remove from the Garage?\n");
-    int index;
-    scanf("%d", &index);
+
+    int input;
+    printf("\n~ ");
+    scanf("%d", &input);
     printf("\n");
 
-    removeFromGarage(garage[index]);
+    removeFromGarage(garage[input]);
+
+    printf("\nCar was removed from the Garage!\n");
+    printf("\nEnter the following command to view all cars:\n\n    ~ print garage");
 }
 
 void estimateCarValue(void)
@@ -97,7 +103,11 @@ void estimateCarValue(void)
     scanf("%d", &input);
     printf("\n");
 
-    printf("\nThe Car in spot %d goes for %d\n", input, calcValue(garage[input]));
+    int value = calcValue(garage[input]);
+    if (value > 0)
+    {
+        printf("\nThe Car in spot %d goes for %d\n", input, value);
+    }
 };
 
 void printCarInformation(void)
@@ -115,28 +125,38 @@ void printCarInformation(void)
 void printAllCars(void)
 {
     printGarage();
-    start();
 }
 
-void start(void)
+void man(void)
 {
-    printf("\nUsage:\n");
+    printf("Usage: cli\n");
+    printf("\nCommands:\n");
+    printf("    %-15s   Show this manual page\n", CLI_PROMPT_HELP);
     printf("    %-15s   Add a new Car to the Garage\n", CLI_PROMPT_NEW);
     printf("    %-15s   Remove a Car from the Garage\n", CLI_PROMPT_REMOVE);
     printf("    %-15s   Calculate the value of a Car\n", CLI_PROMPT_CALC);
     printf("    %-15s   Show details of a Car\n", CLI_PROMPT_PRINT);
     printf("    %-15s   Show details of all Cars\n", CLI_PROMPT_PRINT_ALL);
     printf("    %-15s   Exit the program\n", CLI_PROMPT_EXIT);
+}
 
+void start(void)
+{
+    // Capture user input
     char input[100];
     printf("\n~ ");
     fgets(input, 100, stdin);
     printf("\n");
 
+    // Remove trailing new line character
     if ((strlen(input) > 0) && (input[strlen(input) - 1] == '\n'))
         input[strlen(input) - 1] = '\0';
 
-    if (strcmp(input, CLI_PROMPT_NEW) == 0)
+    if (strcmp(input, CLI_PROMPT_HELP) == 0)
+    {
+        man();
+    }
+    else if (strcmp(input, CLI_PROMPT_NEW) == 0)
     {
         construct();
     }
@@ -160,12 +180,19 @@ void start(void)
     {
         exit(0);
     }
+    else
+    {
+        if (strlen(input) != 1)
+            printf("\nInvalid command: `%s\n`", input);
+    }
 
     start();
 }
 
 int main()
 {
+    system("clear");
+    man();
     start();
     return 0;
 }

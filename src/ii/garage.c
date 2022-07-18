@@ -37,11 +37,11 @@ void printCar(Car car)
     printf("%-15s %s\n", "Make", car.make);
     printf("%-15s %d\n", "Top Speed", car.topSpeed);
     printf("%-15s %d\n", "Doors", car.doors);
-    printf("%-15s %d\n", "Has ABS", car.hasAbs);
+    printf("%-15s %s\n", "Has ABS", car.hasAbs == 1 ? "Yes" : "No");
     printf("Options\n");
     for (int i = 0; i < sizeof(car.options) / sizeof(car.options[0]); i++)
     {
-        printf("    %-11d %s\n", i, car.options[i]);
+        printf("    %-11d %s\n", i + 1, car.options[i]);
     }
     printf("Engine\n");
     printf("    %-11s %d\n", "Horse Power", car.engine.hp);
